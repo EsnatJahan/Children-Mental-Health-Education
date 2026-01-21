@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import '../CssFiles/home.css';
-import bgimg from '../assets/bg2.png';
+import bgimg from '../assets/bg3.png';
 import m7 from '../assets/m7.png';
 import m8 from '../assets/m8.png';
 import m11 from '../assets/m11.png';
