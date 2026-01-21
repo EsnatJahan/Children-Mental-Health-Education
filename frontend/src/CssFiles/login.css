@@ -1,0 +1,61 @@
+/* Full screen gradient background */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #b1aac7, #c7a7b8, #ddd6fe);
+  font-family: Arial, sans-serif;
+}
+
+/* Form card */
+.login-form {
+  background-color: #e0d7f5;
+  padding: 40px;
+  border-radius: 30px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  width: 350px;
+  max-width: 90%;
+  text-align: center;
+}
+
+/* Form title */
+.login-form h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #4c1d95;
+}
+
+/* Inputs */
+.login-form input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+/* Button */
+.login-form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #7c3aed;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-form button:hover {
+  background-color: #5b21b6;
+}
+
+/* Message below button */
+.login-message {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #111;
+}

@@ -1,0 +1,144 @@
+/* Full-page background */
+.signup-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+   background: linear-gradient(135deg, #b1aac7, #c7a7b8, #ddd6fe);
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+/* Card styling */
+.signup-card {
+  background-color: #e0d7f5;
+  padding: 40px;
+  border-radius: 25px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  width: 400px;
+  max-width: 95%;
+  text-align: center;
+}
+
+/* Title */
+.signup-card h2 {
+  font-size: 28px;
+  margin-bottom: 25px;
+  color: #4c1d95;
+}
+
+/* Form Inputs */
+.signup-card input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+/* Submit Button */
+.signup-card button {
+  width: 100%;
+  padding: 12px;
+  background-color: #7c3aed;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.signup-card button:hover {
+  background-color: #5b21b6;
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.divider span {
+  margin: 0 10px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #ccc;
+}
+
+/* Social Icons */
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  color: #7c3aed;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.social-icons a {
+  color: inherit;
+  transition: color 0.3s;
+}
+
+.social-icons a:hover {
+  color: #5b21b6;
+}
+
+/* Login link */
+.login-link {
+  font-size: 14px;
+  color: #333;
+}
+
+.login-link a {
+  color: #7c3aed;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+/* Dialog overlay */
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Dialog box */
+.dialog {
+  background-color: white;
+  padding: 25px;
+  border-radius: 15px;
+  text-align: center;
+  width: 300px;
+}
+
+.dialog button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #7c3aed;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.dialog button:hover {
+  background-color: #5b21b6;
+}

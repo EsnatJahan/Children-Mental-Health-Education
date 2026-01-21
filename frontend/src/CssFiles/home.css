@@ -10,7 +10,7 @@ html, body, #root {
 .bg-container {
   position: relative;
   width: 100vw;
-  height: 80vh;
+  height: 100vh;
   background-size: cover;
   background-position: center;
 }
@@ -75,7 +75,89 @@ button {
   border-radius: 20px;
   border: none;
   background: #4f46e5;
-  color: white;
+  color: #4f46e5;
+  width: 12%;
   cursor: pointer;
   margin-top: 1rem;
+}
+/* Info Card Styles */
+.info-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  background-color: #e0e7ff;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  overflow: hidden;
+  margin: 30px auto;
+  max-width: 1000px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.info-card-wrapper:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+/* Alternate layout */
+.info-card-wrapper.reverse {
+  flex-direction: column-reverse;
+}
+
+@media (min-width: 768px) {
+  .info-card-wrapper {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+  }
+  .info-card-wrapper.reverse {
+    flex-direction: row-reverse;
+  }
+}
+
+.info-card-image {
+  flex: 1;
+  background-color: #c7d2fe;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.info-card-image img {
+  width: 100%;
+  height: 250px;          /* fixed height for all cards */
+  object-fit: cover;      /* ensures the image fills the box without distortion */
+  border-radius: 15px;
+}
+
+.info-card-text {
+  flex: 1;
+  padding: 30px;
+}
+
+.info-card-text h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.info-card-text p {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #333;
+}
+
+.info-points p {
+  position: relative;
+  padding-left: 20px;
+  margin: 10px 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+
+
+.info-points .highlight {
+  color: #7c3aed; /* purple accent */
+  font-weight: 600;
 }
