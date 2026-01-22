@@ -4,34 +4,33 @@ import '../CssFiles/home.css';
 import bgimg from '../assets/bg3.png';
 import m7 from '../assets/m7.png';
 import m8 from '../assets/m8.png';
-import m11 from '../assets/m11.png';
 import m10 from '../assets/m10.png';
-// import img1 from '../assets/mental1.png'; // Image for What is Mental Health
-// import img2 from '../assets/emotional.png'; // Image for Emotional Well-being
-// import img3 from '../assets/about.png'; // Image for About Us
 
 interface InfoCardProps {
   title: string;
   description: React.ReactNode;
   img: string;
-  reverse?: boolean; // to alternate layout
-   textAlign?: "left" | "center" | "right"; 
+  reverse?: boolean; // slide from right if true, left if false
 }
 
 const InfoCard: React.FC<InfoCardProps> = ({ title, description, img, reverse }) => {
   return (
-    <div className={`info-card-wrapper ${reverse ? "reverse" : ""}`}>
-      {/* Left / Right image */}
+    <motion.div
+      className={`info-card-wrapper ${reverse ? "reverse" : ""}`}
+      initial={{ opacity: 0, x: reverse ? 200 : -200 }} // start from left or right
+      whileInView={{ opacity: 1, x: 0 }} // animate when in viewport
+      viewport={{ once: true, amount: 0.6 }} // trigger when 60% visible, only once
+      transition={{ duration: 0.8, ease: "easeOut" }}
+    >
       <div className="info-card-image">
         <img src={img} alt={title} />
       </div>
 
-      {/* Text */}
       <div className="info-card-text">
         <h2>{title}</h2>
         <p>{description}</p>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -61,7 +60,8 @@ const Home: React.FC = () => {
       {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
         transition={{ duration: 0.6 }}
         className="hero"
       >
@@ -69,7 +69,6 @@ const Home: React.FC = () => {
         <p>
           Learn about mental well-being, reduce stigma, and build emotional resilience through education.
         </p>
-        
       </motion.div>
 
       {/* Info Cards */}
@@ -79,32 +78,20 @@ const Home: React.FC = () => {
           description="Mental health includes our emotional, psychological, and social well-being. It affects how we think, feel, and act. It also helps determine how we handle stress, relate to others, and make choices."
           img={m7}
         />
-      <InfoCard
-        title="Why Mental Health Education Matters?" 
-        img={m8}
-        // textAlign="left"
-        reverse
-        description={
-      <div className="info-points">
-        <p>
-          Helps <span className="highlight">understand emotions</span> and manage stress.
-        </p>
-        <p>
-          Teaches <span className="highlight">coping strategies</span> for stress and anxiety.
-        </p>
-        <p>
-          Builds <span className="highlight">emotional resilience</span> and mental well-being.
-        </p>
-        
-        <p>
-          Encourages <span className="highlight">seeking help</span> and support.
-        </p>
-      </div>
-    }
 
-      />
-
-
+        <InfoCard
+          title="Why Mental Health Education Matters?"
+          img={m8}
+          reverse
+          description={
+            <div className="info-points">
+              <p>Helps <span className="highlight">understand emotions</span> and manage stress.</p>
+              <p>Teaches <span className="highlight">coping strategies</span> for stress and anxiety.</p>
+              <p>Builds <span className="highlight">emotional resilience</span> and mental well-being.</p>
+              <p>Encourages <span className="highlight">seeking help</span> and support.</p>
+            </div>
+          }
+        />
 
         <InfoCard
           title="About Us"
@@ -113,8 +100,6 @@ const Home: React.FC = () => {
         />
       </div>
 
-      {/* Counter Demo */}
-      
       <footer>
         © 2026 Mental Health Education Project
       </footer>
