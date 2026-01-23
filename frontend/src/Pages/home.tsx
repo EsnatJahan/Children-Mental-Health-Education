@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import '../CssFiles/home.css';
-import bgimg from '../assets/bg3.png';
+import bgimg from '../assets/m12.png';
 import m7 from '../assets/m7.png';
 import m8 from '../assets/m8.png';
 import m10 from '../assets/m10.png';
@@ -19,7 +19,7 @@ const InfoCard: React.FC<InfoCardProps> = ({ title, description, img, reverse })
       className={`info-card-wrapper ${reverse ? "reverse" : ""}`}
       initial={{ opacity: 0, x: reverse ? 200 : -200 }} // start from left or right
       whileInView={{ opacity: 1, x: 0 }} // animate when in viewport
-      viewport={{ once: true, amount: 0.6 }} // trigger when 60% visible, only once
+      viewport={{ once: true, amount: 0.5 }} // trigger when 60% visible, only once
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
       <div className="info-card-image">
@@ -41,20 +41,160 @@ const Home: React.FC = () => {
     <>
       {/* Background Section */}
       <div
-        className="bg-container"
-        style={{ backgroundImage: `url(${bgimg})` }}
+        className="navbar-floating"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "1rem 3rem",
+          background: "#ffffff",
+          position: "sticky",
+          top: 0,
+          zIndex: 999,
+          boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
+        }}
       >
-        <div className="bg-blur"></div>
-        <div className="navbar-floating">
-          <a href="/signup">Sign Up</a>
-          <a href="#">Find Support</a>
-          <a href="#">Health Conditions</a>
+        {/* LOGO / BRAND */}
+        <div
+          style={{
+            fontSize: "1.5rem",
+            fontWeight: 700,
+            color: "#4a10b4ea",
+            cursor: "pointer",
+          }}
+        >
+          MindGlow
         </div>
-        <div className="content">
-          <h1>Mind<span style={{ color: "#4a10b4ea" }}>Glow</span></h1>
-          <p>Promoting awareness, emotional well-being, and mental resilience.</p>
-          <button className="primary-btn">Get Started</button>
+
+        {/* NAV LINKS */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "2rem",
+          }}
+        >
+          <a
+            href="#"
+            style={{
+              color: "#333",
+              fontWeight: 500,
+              textDecoration: "none",
+            }}
+          >
+            Find Support
+          </a>
+          <a
+            href="#"
+            style={{
+              color: "#333",
+              fontWeight: 500,
+              textDecoration: "none",
+            }}
+          >
+            Perform Test
+          </a>
+
+          <a
+            href="#"
+            style={{
+              color: "#333",
+              fontWeight: 500,
+              textDecoration: "none",
+            }}
+          >
+            Health Conditions
+          </a>
+
+          {/* CTA BUTTON */}
+          <a
+            href="/signup"
+            style={{
+              background: "#4a10b4ea",
+              color: "#fff",
+              padding: "0.5rem 1.2rem",
+              borderRadius: "20px",
+              fontWeight: 500,
+              textDecoration: "none",
+            }}
+          >
+            Sign Up
+          </a>
         </div>
+      </div>
+
+
+
+      {/* HERO SPLIT SECTION */}
+      <div
+        className="hero-split"
+        style={{
+          display: "flex",
+          height: "70vh",
+          maxHeight: "650px",
+          // padding: "4",
+          marginBottom: "3rem",
+          marginTop: "3rem",
+        }}
+      >
+        {/* LEFT IMAGE (2/3) */}
+        <div
+          style={{
+            flex: 2, // ✅ 2 parts
+            backgroundImage: `url(${bgimg})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+
+        {/* RIGHT CONTENT */}
+        <motion.div
+          className="hero-content"
+          initial={{ opacity: 0, x: 60 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+          style={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "3rem", // 🔽 slightly reduced padding
+            textAlign: "center",
+          }}
+        >
+
+          <h1 style={{ fontSize: "3rem" }}>
+            Mind<span style={{ color: "#4a10b4ea" }}>Glow</span>
+          </h1>
+
+          <p
+            style={{
+              margin: "1rem 0 2rem",
+              fontSize: "1.1rem",
+              lineHeight: 1.6,
+            }}
+          >
+            Promoting awareness, emotional well-being, and mental resilience.
+          </p>
+
+          <button
+            className="primary-btn"
+            style={{
+              backgroundColor: "#4a10b4ea", // ✅ add this
+              color: "#fff",
+              border: "none",
+              borderRadius: "8px",
+              padding: "0.8rem 2rem",
+              fontSize: "1rem",
+              cursor: "pointer",
+              width: "150px",
+            }}
+          >
+            Get Started
+          </button>
+
+        </motion.div>
       </div>
 
       {/* Hero Section */}
@@ -65,7 +205,7 @@ const Home: React.FC = () => {
         transition={{ duration: 0.6 }}
         className="hero"
       >
-        <h1>Mental Health Education</h1>
+        <h2>Mental Health Education</h2>
         <p>
           Learn about mental well-being, reduce stigma, and build emotional resilience through education.
         </p>
