@@ -134,7 +134,7 @@ const Home: React.FC = () => {
           maxHeight: "650px",
           // padding: "4",
           marginBottom: "3rem",
-          marginTop: "3rem",
+          marginTop: "4rem",
         }}
       >
         {/* LEFT IMAGE (2/3) */}
@@ -165,7 +165,7 @@ const Home: React.FC = () => {
         >
 
           <h1 style={{ fontSize: "3rem" }}>
-            Mind<span style={{ color: "#4a10b4ea" }}>Glow</span>
+            <span style={{ color: "#3ebcb4ea" }}>Mind</span><span style={{ color: "#4a10b4ea" }}>Glow</span>
           </h1>
 
           <p
@@ -204,6 +204,11 @@ const Home: React.FC = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
         className="hero"
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+        }}
       >
         <h2>Mental Health Education</h2>
         <p>
