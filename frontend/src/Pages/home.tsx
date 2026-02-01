@@ -17,6 +17,7 @@ const InfoCard: React.FC<InfoCardProps> = ({ title, description, img, reverse })
   return (
     <motion.div
       className={`info-card-wrapper ${reverse ? "reverse" : ""}`}
+      style={{textAlign:"center"}}
       initial={{ opacity: 0, x: reverse ? 200 : -200 }} // start from left or right
       whileInView={{ opacity: 1, x: 0 }} // animate when in viewport
       viewport={{ once: true, amount: 0.5 }} // trigger when 60% visible, only once
@@ -26,7 +27,7 @@ const InfoCard: React.FC<InfoCardProps> = ({ title, description, img, reverse })
         <img src={img} alt={title} />
       </div>
 
-      <div className="info-card-text">
+      <div className="info-card-text , ">
         <h2>{title}</h2>
         <p>{description}</p>
       </div>
@@ -75,14 +76,24 @@ const Home: React.FC = () => {
           }}
         >
           <a
-            href="#"
+            href="/"
             style={{
               color: "#333",
               fontWeight: 500,
               textDecoration: "none",
             }}
           >
-            Find Support
+            Home
+          </a>
+          <a
+            href="/lectures"
+            style={{
+              color: "#333",
+              fontWeight: 500,
+              textDecoration: "none",
+            }}
+          >
+            Lectures
           </a>
           <a
             href="#"
@@ -180,6 +191,7 @@ const Home: React.FC = () => {
 
           <button
             className="primary-btn"
+            onClick={() => window.location.href = "/lectures"}
             style={{
               backgroundColor: "#4a10b4ea", // ✅ add this
               color: "#fff",
@@ -240,12 +252,12 @@ const Home: React.FC = () => {
 
         <InfoCard
           title="About Us"
-          description="We aim to promote mental health awareness, reduce stigma, and provide resources for self-care and community support, while educating individuals on emotional well-being and resilience, and building stronger communities that support mental wellness for everyone."
+          description="We aim to promote mental health awareness and provide resources for self-care and community support, while educating individuals on emotional well-being and resilience, and building stronger communities that support mental wellness for everyone."
           img={m10}
         />
       </div>
 
-      <footer>
+      <footer style={{textAlign:"center"}}>
         © 2026 Mental Health Education Project
       </footer>
     </>
