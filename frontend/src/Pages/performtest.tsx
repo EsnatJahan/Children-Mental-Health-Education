@@ -1,66 +1,184 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Trophy, ArrowRight, RefreshCcw, Home, Sparkles, Brain } from "lucide-react";
+import { Star, Trophy, ArrowRight, RefreshCcw, Home, Sparkles, Brain, BookOpen, Utensils, Zap } from "lucide-react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import Brain3D from "../Models/brainmodel";
-import { a } from "@react-spring/three";
 
-const questions = [
-  {
-    id: 1,
-    question: "How did you sleep last night?",
-    options: [
-      { label: "Great!", emoji: "😴", score: 2 },
-      { label: "Okay", emoji: "😐", score: 1 },
-      { label: "Tired", emoji: "😫", score: 0 },
-    ],
+const testSets = {
+  general: {
+    title: "Mind Power Test!",
+    icon: <Zap size={24} />,
+    questions: [
+      {
+        id: 1,
+        question: "How did you sleep last night?",
+        options: [
+          { label: "Great!", emoji: "😴", score: 2 },
+          { label: "Okay", emoji: "😐", score: 1 },
+          { label: "Tired", emoji: "😫", score: 0 },
+        ],
+      },
+      {
+        id: 2,
+        question: "How much time did you spend on your phone today?",
+        options: [
+          { label: "Just a bit", emoji: "⏱️", score: 2 },
+          { label: "A lot!", emoji: "📱", score: 0 },
+          { label: "None at all!", emoji: "🌳", score: 3 },
+        ],
+      },
+      {
+        id: 3,
+        question: "How is your mood right now?",
+        options: [
+          { label: "Happy!", emoji: "😊", score: 2 },
+          { label: "Sad", emoji: "😢", score: 0 },
+          { label: "Angry", emoji: "😠", score: 0 },
+          { label: "Calm", emoji: "😌", score: 2 },
+        ],
+      },
+      {
+        id: 4,
+        question: "Did you play outside today?",
+        options: [
+          { label: "Yes, it was fun!", emoji: "⚽", score: 2 },
+          { label: "No, stayed inside", emoji: "🏠", score: 0 },
+        ],
+      },
+      {
+        id: 5,
+        question: "Do you feel ready to learn something new?",
+        options: [
+          { label: "YES!", emoji: "🚀", score: 2 },
+          { label: "Maybe later", emoji: "🥱", score: 1 },
+        ],
+      },
+    ]
   },
-  {
-    id: 2,
-    question: "How much time did you spend on your phone today?",
-    options: [
-      { label: "Just a bit", emoji: "⏱️", score: 2 },
-      { label: "A lot!", emoji: "📱", score: 0 },
-      { label: "None at all!", emoji: "🌳", score: 3 },
-    ],
+  academic: {
+    title: "School Hero Test!",
+    icon: <BookOpen size={24} />,
+    questions: [
+      {
+        id: 1,
+        question: "How do you feel about school today?",
+        options: [
+          { label: "Excited!", emoji: "🎒", score: 2 },
+          { label: "It's okay", emoji: "🏫", score: 1 },
+          { label: "Bored", emoji: "😴", score: 0 },
+        ],
+      },
+      {
+        id: 2,
+        question: "Do you find it easy to focus on your lessons?",
+        options: [
+          { label: "Very easy", emoji: "🎯", score: 2 },
+          { label: "Sometimes", emoji: "🤔", score: 1 },
+          { label: "Hard to focus", emoji: "🦋", score: 0 },
+        ],
+      },
+      {
+        id: 3,
+        question: "Did you finish your homework or assignments?",
+        options: [
+          { label: "All done!", emoji: "✅", score: 2 },
+          { label: "Most of it", emoji: "📝", score: 1 },
+          { label: "Not yet", emoji: "⏳", score: 0 },
+        ],
+      },
+      {
+        id: 4,
+        question: "How often do you read books for fun?",
+        options: [
+          { label: "Every day!", emoji: "📚", score: 2 },
+          { label: "Once in a while", emoji: "📖", score: 1 },
+          { label: "Rarely", emoji: "📵", score: 0 },
+        ],
+      },
+      {
+        id: 5,
+        question: "Do you enjoy sharing what you learned with others?",
+        options: [
+          { label: "Yes, I love it!", emoji: "🗣️", score: 2 },
+          { label: "A little bit", emoji: "😊", score: 1 },
+          { label: "Not really", emoji: "🤐", score: 0 },
+        ],
+      },
+    ]
   },
-  {
-    id: 3,
-    question: "How is your mood right now?",
-    options: [
-      { label: "Happy!", emoji: "😊", score: 2 },
-      { label: "Sad", emoji: "😢", score: 0 },
-      { label: "Angry", emoji: "😠", score: 0 },
-      { label: "Calm", emoji: "😌", score: 2 },
-    ],
-  },
-  {
-    id: 4,
-    question: "Did you play outside today?",
-    options: [
-      { label: "Yes, it was fun!", emoji: "⚽", score: 2 },
-      { label: "No, stayed inside", emoji: "🏠", score: 0 },
-    ],
-  },
-  {
-    id: 5,
-    question: "Do you feel ready to learn something new?",
-    options: [
-      { label: "YES!", emoji: "🚀", score: 2 },
-      { label: "Maybe later", emoji: "🥱", score: 1 },
-    ],
-  },
-];
+  food: {
+    title: "Healthy Eater Test!",
+    icon: <Utensils size={24} />,
+    questions: [
+      {
+        id: 1,
+        question: "Did you have a healthy breakfast this morning?",
+        options: [
+          { label: "Yes, it was yummy!", emoji: "🥣", score: 2 },
+          { label: "Just a small snack", emoji: "🍎", score: 1 },
+          { label: "I skipped it", emoji: "❌", score: 0 },
+        ],
+      },
+      {
+        id: 2,
+        question: "How many servings of fruits or veggies did you have today?",
+        options: [
+          { label: "3 or more!", emoji: "🥦", score: 2 },
+          { label: "1 or 2", emoji: "🥕", score: 1 },
+          { label: "None today", emoji: "🍩", score: 0 },
+        ],
+      },
+      {
+        id: 3,
+        question: "How much water did you drink today?",
+        options: [
+          { label: "Plenty of water!", emoji: "💧", score: 2 },
+          { label: "A little bit", emoji: "🥛", score: 1 },
+          { label: "Mostly soda/juice", emoji: "🥤", score: 0 },
+        ],
+      },
+      {
+        id: 4,
+        question: "How often do you eat junk food or sweets?",
+        options: [
+          { label: "Rarely", emoji: "🥗", score: 2 },
+          { label: "Sometimes", emoji: "🍕", score: 1 },
+          { label: "Quite often", emoji: "🍭", score: 0 },
+        ],
+      },
+      {
+        id: 5,
+        question: "Do you eat your meals at the same time every day?",
+        options: [
+          { label: "Yes, regularly", emoji: "⏰", score: 2 },
+          { label: "Sometimes", emoji: "🍽️", score: 1 },
+          { label: "No, it varies", emoji: "🤷", score: 0 },
+        ],
+      },
+    ]
+  }
+};
+
+type CategoryKey = keyof typeof testSets;
 
 export default function PerformTest() {
   const [step, setStep] = useState(0); // 0: Start, 1: Quiz, 2: Game, 3: Result
+  const [selectedCategory, setSelectedCategory] = useState<CategoryKey>("general");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [gameScore, setGameScore] = useState(0);
   const [stars, setStars] = useState<{ id: number; x: number; y: number }[]>([]);
 
-  const totalPossible = 21; // 11 from quiz + 10 from game
+  const questions = testSets[selectedCategory].questions;
+  
+  // Calculate max possible score for the selected quiz
+  const maxQuizScore = questions.reduce((acc, q) => {
+    const maxOptionScore = Math.max(...q.options.map(o => o.score));
+    return acc + maxOptionScore;
+  }, 0);
+  
+  const totalPossible = maxQuizScore + 10; // quiz + 10 from game
   const finalScore = score + gameScore;
   const stressLevel = Math.max(0, 1 - finalScore / totalPossible);
 
@@ -82,6 +200,11 @@ export default function PerformTest() {
       return () => clearInterval(interval);
     }
   }, [step, stars]);
+
+  const handleCategorySelect = (category: CategoryKey) => {
+    setSelectedCategory(category);
+    setStep(1);
+  };
 
   const handleOptionClick = (optionScore: number) => {
     setScore(score + optionScore);
@@ -153,30 +276,49 @@ export default function PerformTest() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <h1 style={{ color: "#4a10b4ea", fontSize: "2.5rem", marginBottom: "1rem" }}>Mind Power Test! 🧠</h1>
+              <h1 style={{ color: "#4a10b4ea", fontSize: "2.5rem", marginBottom: "1rem" }}>Brain Quizes!🧠</h1>
               <p style={{ fontSize: "1.2rem", color: "#666", marginBottom: "2rem" }}>
-                Let's see how your brain is doing today with some fun questions and a game!
+                Choose a fun test to see how your brain is doing today!
               </p>
-              <button
-                onClick={() => setStep(1)}
-                style={{
-                  background: "#4a10b4ea",
-                  width: "35%",
-                  // height: "auto",
-                  color: "white",
-                  padding: "1rem 2rem",
-                  fontSize: "1.5rem",
-                  border: "none",
-                  borderRadius: "50px",
-                  cursor: "pointer",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                  boxShadow: "0 4px 15px rgba(74, 16, 180, 0.3)",
-                }}
-              >
-                Start Fun! <ArrowRight />
-              </button>
+              
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                {(Object.keys(testSets) as CategoryKey[]).map((key) => (
+                  <button
+                    key={key}
+                    onClick={() => handleCategorySelect(key)}
+                    style={{
+                      background: "white",
+                      color: "#4a10b4ea",
+                      width: "36%",
+                      marginLeft: "32%",
+                      padding: "1.2rem",
+                      fontSize: "1.2rem",
+                      border: "2px solid #4a10b4ea",
+                      borderRadius: "16px",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      fontWeight: "bold",
+                      transition: "all 0.2s",
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.background = "#4a10b4ea";
+                      e.currentTarget.style.color = "white";
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.background = "white";
+                      e.currentTarget.style.color = "#4a10b4ea";
+                    }}
+                  >
+                    <span style={{ display: "flex", alignItems: "center", gap: "0.8rem" }}>
+                      {testSets[key].icon}
+                      {testSets[key].title}
+                    </span>
+                    <ArrowRight size={20} />
+                  </button>
+                ))}
+              </div>
             </motion.div>
           )}
 
@@ -187,8 +329,9 @@ export default function PerformTest() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}
             >
-              <div style={{ marginBottom: "1rem", color: "#4a10b4ea", fontWeight: "bold" }}>
-                Question {currentQuestion + 1} of {questions.length}
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: "1rem", color: "#4a10b4ea", fontWeight: "bold" }}>
+                <span>{testSets[selectedCategory].title}</span>
+                <span>Question {currentQuestion + 1} of {questions.length}</span>
               </div>
               <div
                 style={{
@@ -312,10 +455,10 @@ export default function PerformTest() {
               </div>
 
               <div style={{ fontSize: "1.4rem", margin: "0.5rem 0" }}>
-                Your Mind Score: <span style={{ fontWeight: "bold", color: "#4CAF50" }}>{finalScore}</span>
+                {testSets[selectedCategory].title} Score: <span style={{ fontWeight: "bold", color: "#4CAF50" }}>{finalScore}</span>
               </div>
               <p style={{ color: "#666", lineHeight: 1.6, fontSize: "0.95rem" }}>
-                {finalScore > 15
+                {finalScore > (totalPossible * 0.7)
                   ? "Your brain is glowing! You are doing a great job taking care of your mind. Keep playing and learning!"
                   : "You are doing good! Remember to take breaks from screens and play outside to keep your brain happy."}
               </p>
@@ -329,6 +472,7 @@ export default function PerformTest() {
                     border: "2px solid #4a10b4ea",
                     background: "transparent",
                     color: "#4a10b4ea",
+                    width: "35%",
                     fontWeight: "bold",
                     cursor: "pointer",
                     display: "flex",
@@ -336,7 +480,7 @@ export default function PerformTest() {
                     gap: "0.4rem",
                   }}
                 >
-                  <RefreshCcw size={16} /> Try Again
+                  <RefreshCcw size={16} /> Try Another
                 </button>
                 <a
                   href="/lectures"
