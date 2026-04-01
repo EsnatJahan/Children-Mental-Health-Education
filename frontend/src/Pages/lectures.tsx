@@ -21,7 +21,7 @@ export default function MentalScene() {
   // Emoji logic
   const getFace = () => {
     if (stress < 0.3) return "😊";
-    if (stress < 0.7) return "😐";
+    if (stress < 0.8) return "😐";
     return "😞";
   };
 
@@ -96,7 +96,7 @@ export default function MentalScene() {
             Lectures
           </a>
           <a
-            href="#"
+            href="/performtest"
             style={{
               color: "#333",
               fontWeight: 500,

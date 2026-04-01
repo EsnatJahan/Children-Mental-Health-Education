@@ -7,6 +7,7 @@ import Home from "./Pages/home";
 import Login from "./Pages/login";
 import SignUp from "./Pages/signup";
 import Lectures from "./Pages/lectures";
+import PerformTest from "./Pages/performtest";
 
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path = "/lectures" element={<Lectures />} />
+        <Route path="/performtest" element={<PerformTest />} />
       </Routes>
     </Router>
   </React.StrictMode>

@@ -96,7 +96,7 @@ const Home: React.FC = () => {
             Lectures
           </a>
           <a
-            href="#"
+            href="/performtest"
             style={{
               color: "#333",
               fontWeight: 500,
