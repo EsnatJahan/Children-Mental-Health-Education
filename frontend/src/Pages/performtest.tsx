@@ -509,9 +509,11 @@ export default function PerformTest() {
                 <div style={{ fontSize: "1rem", fontWeight: "700", color: "#b2bec3", textTransform: "uppercase" }}>Final Mind Score</div>
                 <div style={{ fontSize: "3.5rem", fontWeight: "900", color: "#4CAF50" }}>{finalScore}</div>
                 <p style={{ color: "#636e72", lineHeight: 1.6, fontSize: "1.1rem", marginTop: "1rem" }}>
-                  {finalScore > (totalPossible * 0.7)
-                    ? "Your brain is glowing! You are doing a great job taking care of your mind. Keep playing and learning!"
-                    : "You are doing good! Remember to take breaks from screens and play outside to keep your brain happy."}
+                  {finalScore <= (totalPossible * 0.5)
+                    ? "Your brain is a bit tired! It's time to give it some extra love and care. Try to get more sleep and spend less time on screens today."
+                    : finalScore <= (totalPossible * 0.75)
+                    ? "You are doing good! Your brain is healthy, but there's room for even more glow. Remember to take breaks from screens and play outside to keep your brain happy."
+                    : "Your brain is glowing! You are doing a great job taking care of your mind. Keep playing, learning, and sharing your happiness with others!"}
                 </p>
               </div>
 
