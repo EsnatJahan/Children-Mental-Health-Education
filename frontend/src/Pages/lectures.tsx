@@ -212,8 +212,8 @@ export default function MentalScene() {
                     padding: "1.5rem 1rem",
                     borderRadius: "28px",
                     border: "none",
-                    width: "10%",
-                    marginLeft: "30%",
+                    width: "25%",
+                    marginLeft: "40%",
                     background: activeActivity === act.id ? act.color : "white",
                     color: activeActivity === act.id ? "yellow" : "#2d3436",
                     cursor: "pointer",
@@ -329,7 +329,7 @@ export default function MentalScene() {
                   <span style={{ fontWeight: "700", color: "#b2bec3" }}>PREPARING 3D SCAN...</span>
                 </div>
               }>
-                <Canvas camera={{ position: [0, 0, 12], fov: 50 }} gl={{ alpha: true }}>
+                <Canvas camera={{ position: [0, 0, 15], fov: 50 }} gl={{ alpha: true }}>
                   <ambientLight intensity={1.2} />
                   <directionalLight position={[5, 10, 5]} intensity={1.5} />
                   <Brain3D stress={stress} />

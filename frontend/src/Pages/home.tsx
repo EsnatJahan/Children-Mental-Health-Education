@@ -93,7 +93,7 @@ const Home: React.FC = () => {
               textDecoration: "none",
             }}
           >
-            Lectures
+            Explore
           </a>
           <a
             href="/performtest"

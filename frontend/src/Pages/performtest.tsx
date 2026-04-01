@@ -247,7 +247,7 @@ export default function PerformTest() {
           <Home size={20} /> Home
         </a>
         <a href="/lectures" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#4a10b4ea', textDecoration: 'none', fontWeight: '800', fontSize: "1rem" }}>
-          <Brain size={20} /> Lectures
+          <Brain size={20} /> Explore
         </a>
       </div>
 
