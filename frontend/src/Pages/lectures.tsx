@@ -15,7 +15,9 @@ import {
   Zap,
   Heart,
   RefreshCw,
-  Sparkles
+  Sparkles,
+  Timer,
+  Battery
 } from "lucide-react";
 import Brain3D from "../Models/brainmodel";
 import childNormal from "../assets/happy.png";
@@ -26,27 +28,7 @@ type ActivityType = 'none' | 'screen' | 'reading' | 'outdoor' | 'sleep';
 export default function MentalScene() {
   const [stress, setStress] = useState(0);
   const [activeActivity, setActiveActivity] = useState<ActivityType>('none');
-
-  // Brain Logic based on activity
-  useEffect(() => {
-    let interval: any;
-    
-    if (activeActivity === 'screen') {
-      interval = setInterval(() => {
-        setStress((prev) => Math.min(prev + 0.04, 1));
-      }, 400);
-    } else if (activeActivity === 'outdoor' || activeActivity === 'sleep') {
-      interval = setInterval(() => {
-        setStress((prev) => Math.max(prev - 0.06, 0));
-      }, 400);
-    } else if (activeActivity === 'reading') {
-      interval = setInterval(() => {
-        setStress((prev) => Math.max(prev - 0.02, 0.1));
-      }, 400);
-    }
-
-    return () => clearInterval(interval);
-  }, [activeActivity]);
+  const [duration, setDuration] = useState(0);
 
   const activities = [
     { 
@@ -54,35 +36,79 @@ export default function MentalScene() {
       label: 'Video Games', 
       icon: <Gamepad2 size={24} />, 
       color: '#ff4757', 
-      description: 'Too much screen time can make your brain "spark" with too much energy!' 
+      description: 'Too much screen time can make your brain "spark" with too much energy!',
+      min: 0, max: 240, step: 15, unit: 'mins'
     },
     { 
       id: 'reading', 
       label: 'Reading', 
       icon: <BookOpen size={24} />, 
       color: '#2f3542', 
-      description: 'Reading helps your brain focus and stay calm like a quiet library.' 
+      description: 'Reading helps your brain focus and stay calm like a quiet library.',
+      min: 0, max: 120, step: 10, unit: 'mins'
     },
     { 
       id: 'outdoor', 
       label: 'Outdoor Play', 
       icon: <Trees size={24} />, 
       color: '#2ed573', 
-      description: 'Fresh air and running help your brain "breathe" and lower stress.' 
+      description: 'Fresh air and running help your brain "breathe" and lower stress.',
+      min: 0, max: 180, step: 15, unit: 'mins'
     },
     { 
       id: 'sleep', 
       label: 'Deep Sleep', 
       icon: <Moon size={24} />, 
       color: '#1e90ff', 
-      description: 'When you sleep, your brain "cleans" itself and recharges for tomorrow!' 
+      description: 'When you sleep, your brain "cleans" itself and recharges for tomorrow!',
+      min: 0, max: 12, step: 0.5, unit: 'hours'
     },
   ];
 
+  // Brain Logic: Calculate stress based on duration and activity
+  useEffect(() => {
+    if (activeActivity === 'none') {
+      setStress(0.2); // Baseline
+      setDuration(0);
+      return;
+    }
+
+    let newStress = 0.2;
+    if (activeActivity === 'screen') {
+      // Screen time: linear increase
+      newStress = Math.min(0.2 + (duration / 120), 1);
+    } else if (activeActivity === 'outdoor') {
+      // Outdoor: improves up to 60-90 mins, then exhaustion kicks in
+      if (duration <= 90) {
+        newStress = Math.max(0.2 - (duration / 180), 0);
+      } else {
+        newStress = Math.min((duration - 90) / 180, 0.8);
+      }
+    } else if (activeActivity === 'reading') {
+      // Reading: good focus, but eye strain after 60 mins
+      if (duration <= 60) {
+        newStress = Math.max(0.2 - (duration / 200), 0.05);
+      } else {
+        newStress = Math.min(0.05 + (duration - 60) / 100, 0.7);
+      }
+    } else if (activeActivity === 'sleep') {
+      // Sleep: optimal 8-9 hours, less or more increases "stress" (grogginess)
+      if (duration >= 7 && duration <= 9) {
+        newStress = 0;
+      } else if (duration < 7) {
+        newStress = Math.min((7 - duration) / 7, 0.9);
+      } else {
+        newStress = Math.min((duration - 9) / 3, 0.6); // Oversleeping grogginess
+      }
+    }
+    setStress(newStress);
+  }, [activeActivity, duration]);
+
   const getBrainStatus = () => {
-    if (stress < 0.3) return { label: "Super Happy!", color: "#2ed573", emoji: "🌈", sub: "Doing Great!" };
-    if (stress < 0.7) return { label: "A Bit Tired", color: "#ffa502", emoji: "☁️", sub: "Needs Rest" };
-    return { label: "High Stress!", color: "#ff4757", emoji: "⚡", sub: "Calm Down" };
+    const charge = Math.round((1 - stress) * 100);
+    if (charge > 80) return { label: "Fully Charged", color: "#2ed573", emoji: "🔋", sub: "Brain is Sharp!" };
+    if (charge > 40) return { label: "Steady Power", color: "#ffa502", emoji: "⚡", sub: "Doing good" };
+    return { label: "Low Battery!", color: "#ff4757", emoji: "🪫", sub: "Need to Recharge" };
   };
 
   const status = getBrainStatus();
@@ -94,6 +120,7 @@ export default function MentalScene() {
       fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
       color: "#2d3436"
     }}>
+      {/* Navigation */}
       {/* Navigation */}
       <nav style={{
         display: "flex",
@@ -132,6 +159,7 @@ export default function MentalScene() {
         </div>
       </nav>
 
+
       <main style={{ maxWidth: "1300px", margin: "0 auto", padding: "3rem 2rem" }}>
         
         {/* Title Section */}
@@ -161,6 +189,7 @@ export default function MentalScene() {
             The Brain Lab helps you see how your daily activities change your mind's energy and mood!
           </p>
         </header>
+        {/* ... rest of header ... */}
 
         <div style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: "3rem", alignItems: "start" }}>
           
@@ -182,8 +211,10 @@ export default function MentalScene() {
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
                 <div>
-                  <h3 style={{ margin: 0, color: "#636e72", fontSize: "0.9rem", textTransform: "uppercase", letterSpacing: "1px" }}>Power Meter</h3>
-                  <div style={{ fontSize: "1.8rem", fontWeight: "800", color: status.color }}>{status.label}</div>
+                  <h3 style={{ margin: 0, color: "#636e72", fontSize: "0.9rem", textTransform: "uppercase", letterSpacing: "1px" }}>Brain Charge Monitor</h3>
+                  <div style={{ fontSize: "1.8rem", fontWeight: "800", color: status.color }}>
+                    {Math.round((1 - stress) * 100)}% {status.label}
+                  </div>
                 </div>
                 <div style={{ fontSize: "3.5rem" }}>{status.emoji}</div>
               </div>
@@ -194,6 +225,51 @@ export default function MentalScene() {
                   style={{ height: "100%", borderRadius: "15px", boxShadow: `0 0 20px ${status.color}66` }}
                 />
               </div>
+
+              {activeActivity !== 'none' && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  style={{ 
+                    marginTop: "1.5rem",
+                    padding: "1.5rem",
+                    background: "#f8faff",
+                    borderRadius: "24px",
+                    border: "1px solid #edf2ff"
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "700", color: "#4a10b4ea" }}>
+                      <Timer size={20} />
+                      How long?
+                    </div>
+                    <div style={{ background: "white", padding: "0.3rem 0.8rem", borderRadius: "10px", fontWeight: "800", color: status.color, boxShadow: "0 2px 5px rgba(0,0,0,0.05)" }}>
+                      {duration} {activities.find(a => a.id === activeActivity)?.unit}
+                    </div>
+                  </div>
+                  
+                  <input 
+                    type="range"
+                    min={activities.find(a => a.id === activeActivity)?.min}
+                    max={activities.find(a => a.id === activeActivity)?.max}
+                    step={activities.find(a => a.id === activeActivity)?.step}
+                    value={duration}
+                    onChange={(e) => setDuration(parseFloat(e.target.value))}
+                    style={{
+                      width: "100%",
+                      accentColor: activities.find(a => a.id === activeActivity)?.color,
+                      cursor: "pointer",
+                      height: "8px",
+                      borderRadius: "5px"
+                    }}
+                  />
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", color: "#b2bec3", marginTop: "0.5rem", fontWeight: "600" }}>
+                    <span>{activities.find(a => a.id === activeActivity)?.min} {activities.find(a => a.id === activeActivity)?.unit}</span>
+                    <span>{activities.find(a => a.id === activeActivity)?.max} {activities.find(a => a.id === activeActivity)?.unit}</span>
+                  </div>
+                </motion.div>
+              )}
+
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.85rem", color: "#b2bec3", fontWeight: "700" }}>
                 <span>DRAINED</span>
                 <span>FULLY CHARGED!</span>
@@ -268,7 +344,7 @@ export default function MentalScene() {
             </AnimatePresence>
 
             <button 
-              onClick={() => { setActiveActivity('none'); setStress(0); }}
+              onClick={() => { setActiveActivity('none'); setStress(0); setDuration(0); }}
               style={{
                 marginTop: "1rem",
                 padding: "1.2rem",
