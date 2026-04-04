@@ -168,7 +168,8 @@ export default function PerformTest() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [gameScore, setGameScore] = useState(0);
-  const [stars, setStars] = useState<{ id: number; x: number; y: number }[]>([]);
+  const [balloons, setBalloons] = useState<{ id: number; x: number; y: number; isBurst: boolean }[]>([]);
+  const [individualScores, setIndividualScores] = useState<number[]>([]);
 
   const questions = testSets[selectedCategory].questions;
   
@@ -177,27 +178,21 @@ export default function PerformTest() {
     return acc + maxOptionScore;
   }, 0);
   
-  const totalPossible = maxQuizScore + 10;
+  const totalPossible = maxQuizScore + 5;
   const finalScore = score + gameScore;
   const stressLevel = Math.max(0, 1 - finalScore / totalPossible);
 
   useEffect(() => {
-    if (step === 2) {
-      const interval = setInterval(() => {
-        if (stars.length < 10) {
-          setStars((prev) => [
-            ...prev,
-            {
-              id: Math.random(),
-              x: Math.random() * 80 + 10,
-              y: Math.random() * 60 + 20,
-            },
-          ]);
-        }
-      }, 800);
-      return () => clearInterval(interval);
+    if (step === 2 && balloons.length === 0) {
+      const newBalloons = Array.from({ length: 5 }).map((_, i) => ({
+        id: i,
+        x: 10 + (i * 18),
+        y: 20 + (Math.random() * 40),
+        isBurst: false,
+      }));
+      setBalloons(newBalloons);
     }
-  }, [step, stars]);
+  }, [step, balloons.length]);
 
   const handleCategorySelect = (category: CategoryKey) => {
     setSelectedCategory(category);
@@ -205,6 +200,7 @@ export default function PerformTest() {
   };
 
   const handleOptionClick = (optionScore: number) => {
+    setIndividualScores(prev => [...prev, optionScore]);
     setScore(score + optionScore);
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
@@ -213,20 +209,26 @@ export default function PerformTest() {
     }
   };
 
-  const collectStar = (id: number) => {
-    setGameScore(gameScore + 1);
-    setStars(stars.filter((s) => s.id !== id));
-    if (gameScore + 1 >= 10) {
-      setStep(3);
-    }
+  const burstBalloon = (id: number) => {
+    if (balloons[id].isBurst) return;
+    setBalloons(prev => prev.map(b => b.id === id ? { ...b, isBurst: true } : b));
+    setGameScore(prev => prev + 1);
   };
+
+  useEffect(() => {
+    if (step === 2 && gameScore === 5) {
+      const timer = setTimeout(() => setStep(3), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [gameScore, step]);
 
   const resetTest = () => {
     setStep(0);
     setCurrentQuestion(0);
     setScore(0);
     setGameScore(0);
-    setStars([]);
+    setBalloons([]);
+    setIndividualScores([]);
   };
 
   return (
@@ -409,17 +411,14 @@ export default function PerformTest() {
               <div style={{ display: "inline-flex", background: "#fff9db", color: "#f59f00", padding: "0.5rem 1rem", borderRadius: "50px", fontWeight: "700", fontSize: "0.8rem", marginBottom: "1.5rem" }}>
                 BONUS ROUND! ✨
               </div>
-              <h2 style={{ color: "#2d3436", fontSize: "2.2rem", fontWeight: "800" }}>Brain Power Boost!</h2>
-              <p style={{ color: "#636e72", marginBottom: "1.5rem" }}>Catch 10 glowing stars to finish the test!</p>
+              <h2 style={{ color: "#2d3436", fontSize: "2.2rem", fontWeight: "800" }}>Pop the Balloons!</h2>
+              <p style={{ color: "#636e72", marginBottom: "1.5rem" }}>Burst 5 balloons to reveal your question scores!</p>
               
-              <div style={{ display: "flex", justifyContent: "center", gap: "1rem", marginBottom: "1.5rem" }}>
-                {Array.from({ length: 10 }).map((_, i) => (
-                  <Star 
-                    key={i} 
-                    size={20} 
-                    fill={i < gameScore ? "#ffd700" : "#eee"} 
-                    color={i < gameScore ? "#ffd700" : "#eee"} 
-                  />
+              <div style={{ display: "flex", justifyContent: "center", gap: "1.5rem", marginBottom: "1.5rem" }}>
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <span key={i} style={{ fontSize: "2rem", filter: i < gameScore ? "none" : "grayscale(100%) opacity(0.3)" }}>
+                    🎈
+                  </span>
                 ))}
               </div>
 
@@ -434,22 +433,58 @@ export default function PerformTest() {
                   cursor: "crosshair"
                 }}
               >
-                {stars.map((star) => (
+                {balloons.map((balloon) => (
                   <motion.div
-                    key={star.id}
-                    initial={{ scale: 0, rotate: -45 }}
-                    animate={{ scale: [1, 1.2, 1], rotate: 0 }}
-                    transition={{ repeat: Infinity, duration: 1 }}
-                    onClick={() => collectStar(star.id)}
+                    key={balloon.id}
+                    initial={{ scale: 0, y: 50 }}
+                    animate={{ scale: 1, y: 0 }}
+                    whileHover={!balloon.isBurst ? { scale: 1.1 } : {}}
+                    onClick={() => !balloon.isBurst && burstBalloon(balloon.id)}
                     style={{
                       position: "absolute",
-                      left: `${star.x}%`,
-                      top: `${star.y}%`,
-                      cursor: "pointer",
-                      filter: "drop-shadow(0 0 10px rgba(255, 215, 0, 0.5))"
+                      left: `${balloon.x}%`,
+                      top: `${balloon.y}%`,
+                      cursor: balloon.isBurst ? "default" : "pointer",
+                      fontSize: "3.5rem",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      filter: "drop-shadow(0 5px 15px rgba(0,0,0,0.1))"
                     }}
                   >
-                    <Star size={45} fill="#ffd700" color="#ffd700" />
+                    {!balloon.isBurst ? (
+                      <motion.div
+                        animate={{ y: [0, -10, 0] }}
+                        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                      >
+                        🎈
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        style={{ textAlign: "center" }}
+                      >
+                        <div style={{ fontSize: "2.5rem" }}>💥</div>
+                        <div style={{ 
+                          fontSize: "1.5rem", 
+                          fontWeight: "900", 
+                          color: "white",
+                          background: "#4a10b4ea",
+                          borderRadius: "50%",
+                          width: "45px",
+                          height: "45px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          boxShadow: "0 4px 15px rgba(74, 16, 180, 0.4)",
+                          marginTop: "-15px",
+                          border: "3px solid white"
+                        }}>
+                          {individualScores[balloon.id]}
+                        </div>
+                      </motion.div>
+                    )}
                   </motion.div>
                 ))}
               </div>
